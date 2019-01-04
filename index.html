@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+  <head>
+    <title>MAFIA</title>
+  </head>
+  <body>
+
+    <h2>Join a Room</h2>
+    Room: <input type='text' id='room' />
+    <br><br>
+    Name: <input type='text' id='name' />
+    <br><br>
+    <button onclick="join()"> JOIN </button>
+    <br><br>
+    <div id='listarea'></div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+
+    function makeUL(array) {
+        // Create the list element:
+        var list = document.createElement('ul');
+
+        for(var i = 0; i < array.length; i++) {
+            // Create the list item:
+            var item = document.createElement('li');
+
+            // Set its contents:
+            item.appendChild(document.createTextNode(array[i]));
+
+            // Add it to the list:
+            list.appendChild(item);
+        }
+
+        // Finally, return the constructed list:
+        return list;
+    }
+    var socket = io();
+
+    socket.on('updateRoom', clients => {
+
+        document.getElementById('listarea').innerHTML = "";
+        document.getElementById('listarea').appendChild(makeUL(clients));
+        console.log(clients);
+    })
+
+    function join(){
+        var data = {};
+        data.room = document.getElementById('room').value;
+        data.name = document.getElementById('name').value;
+        socket.emit('roomJoin', data);
+    }
+    </script>
+  </body>
+</html>
