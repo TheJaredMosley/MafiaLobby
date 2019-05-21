@@ -12,7 +12,7 @@ var rooms = [];
 var roles = ["Mafia Member", "Villager", "Villager", "Cop", "Doctor", "Mafia Member", "Villager", "Villager", "Villager", "Mafia Member", "Villager", "Villager", "Villager", "Mafia Member"];
 
 app.get('/', function(req, res){
-  res.sendFile(__dirname + '\\index.html');
+  res.sendFile(__dirname + '/index.html');
 });
 
 
