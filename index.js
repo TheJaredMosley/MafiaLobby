@@ -19,7 +19,7 @@ app.get('/', function(req, res){
 
 
 
-http.listen(80, function(){
+http.listen(process.env.PORT || 80, function(){
   console.log('listening on *:3000');
 });
 
