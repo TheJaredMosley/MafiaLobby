@@ -5,7 +5,7 @@ var io = require('socket.io')(http);
 var path = require('path');
 
 
-app.use(express.static('/public'));
+app.use(express.static('public'));
 
 var users = [];
 var rooms = [];
