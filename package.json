@@ -8,5 +8,9 @@
   },
   "scripts": {
     "start": "node index.js"
+  },
+  "engines": {
+    "node": "10.13.0",
+    "npm": ">=6.0.0"
   }
 }
