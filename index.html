@@ -1,55 +1,225 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
   <head>
-    <title>MAFIA</title>
+    <meta charset="UTF-8">
+	  <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="stylesheet.css" type="text/css">
+    <title>Mafia App</title>
   </head>
   <body>
+  <div id='gameArea' class="centered">
+  
 
-    <h2>Join a Room</h2>
-    Room: <input type='text' id='room' />
-    <br><br>
-    Name: <input type='text' id='name' />
-    <br><br>
-    <button onclick="join()"> JOIN </button>
-    <br><br>
-    <div id='listarea'></div>
+  <div id='nonGameArea' class='none-game-area'>
+    <h2> Blood on the Clocktower </h2>
+  </div>
+	
+	<div id='role' class='role'>
+    <button class="large button" onclick="showRole()">Show/Hide Role</button>
+    <div id='imageRole'>
+      <img id = "imgSrc" src='/img/Baron_Token.png'>
+    </div>
+  </div>
+  
+	
+	<div id='loginArea';>
+	
+	<p><input id="name" type="text" placeholder="Name"></p>
+	<p><input id="room" type="text" placeholder="Room"></p>
 
-    <script src="/socket.io/socket.io.js"></script>
-    <script>
+	<button class="large button" onclick="join()">Join</button>
+	</div>
+	
+	
+	
+	
+	
+	
+	<div id='roomCode' class='room-code'>
+	<p id='code'> Room Code: ABCDEF </p>
+	</div>
+	
+	<div id='startGame'>
+	<p> <button class="button" onclick="start()">Start the Game</button> </p>
+	</div>
+	
+	<div id='listArea' class='list-area'>
+	<h4> Players in Game </h4>
+	<ul>
+
+	</ul>
+  </div>
+
+  <div id='grim' class='list-area'>
+    <ul>
+
+    </ul>
+  </div>
+  
+  <div id='roleinfo'>
+      <ul>
+          <li><span><img src='/img/Townsfolk.png'></span></li>
+          <li><img src='/img/Chef_print.png'></li>
+          <li><img src='/img/Empath_print.png'></li>
+          <li><img src='/img/Fortune Teller_print.png'></li>
+          <li><img src='/img/Investigator_print.png'></li>
+          <li><img src='/img/Librarian_print.png'></li>
+          <li><img src='/img/Mayor_print.png'></li>
+          <li><img src='/img/Monk_print.png'></li>
+          <li><img src='/img/Ravenkeeper_print.png'></li>
+          <li><img src='/img/Slayer_print.png'></li>
+          <li><img src='/img/Soldier_print.png'></li>
+          <li><img src='/img/Undertaker_print.png'></li>
+          <li><img src='/img/Washerwoman_print.png'></li>
+          <li><img src='/img/Virgin_print.png'></li>
+
+          <li><span><img src='/img/Outsiders.png'></span></li>
+          <li><img src='/img/Butler_print.png'></li>
+          <li><img src='/img/Drunk_print.png'></li>
+          <li><img src='/img/Saint_print.png'></li>
+          <li><img src='/img/Recluse_print.png'></li>
+
+          <li><span><img src='/img/Minions.png'></span></li>
+          <li><img src='/img/Baron_print.png'></li>
+          <li><img src='/img/Scarlet Woman_print.png'></li>
+          <li><img src='/img/Poisoner_print.png'></li>
+          <li><img src='/img/Spy_print.png'></li>
+      </ul>
+  </div>
+	
+	<!-- 
+	<div class='control-buttons'>
+	<button class="button" onclick='create()'>Create</button>
+	<button class="button" onclick='waiting()'>Waiting</button>
+	<button class="button" onclick='game()'>Game</button>
+  </div>
+  -->
+	
+  </div>
+  
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+
+    var yourRole;
 
     function makeUL(array) {
         // Create the list element:
         var list = document.createElement('ul');
-
         for(var i = 0; i < array.length; i++) {
             // Create the list item:
             var item = document.createElement('li');
-
             // Set its contents:
             item.appendChild(document.createTextNode(array[i]));
-
             // Add it to the list:
             list.appendChild(item);
         }
-
         // Finally, return the constructed list:
         return list;
     }
+
+    function makeRoleList(array) {
+      var list = document.createElement('ul');
+        for(var i = 0; i < array.length; i++) {
+            // Create the list item:
+            var item = document.createElement('li');
+            // Set its contents:
+            item.appendChild(document.createTextNode(array[i].name + ": " + array[i].role));
+            // Add it to the list:
+            list.appendChild(item);
+        }
+        // Finally, return the constructed list:
+        return list;
+    }
+
+    function create(){
+      document.getElementById('roomCode').style.display = "none";
+      document.getElementById('listArea').style.display = "none";
+      document.getElementById('role').style.display = "none";
+      document.getElementById('startGame').style.display = "none";
+      document.getElementById('nonGameArea').style.display = "block";
+      document.getElementById('loginArea').style.display = "block"; 
+      document.getElementById('imageRole').style.display = "none";
+    }
+
+    create();
+    
+    function waiting(){
+      document.getElementById('roomCode').style.display = "block";
+      document.getElementById('listArea').style.display = "block";
+      document.getElementById('role').style.display = "none";
+      document.getElementById('startGame').style.display = "block";
+      document.getElementById('nonGameArea').style.display = "block";
+      document.getElementById('loginArea').style.display = "none";
+      document.getElementById('imageRole').style.display = "none";
+    }
+    
+    function game(){
+      document.getElementById('roomCode').style.display = "block";
+      document.getElementById('listArea').style.display = "block";
+      document.getElementById('role').style.display = "block";
+      document.getElementById('startGame').style.display = "none";
+      document.getElementById('nonGameArea').style.display = "block";
+      document.getElementById('loginArea').style.display = "none";
+      document.getElementById('imageRole').style.display = "none";
+    }
+    
+    function hideAll(){
+      var x = document.getElementsByTagName('div');
+      for(var i = 0; i < x.length; i++){
+        x[i].style.display = "none";
+      }
+    }
+
+    function showRole(){
+      if(document.getElementById('imageRole').style.display == "none"){
+        document.getElementById('imageRole').style.display = "block";
+      }
+      else{
+        document.getElementById('imageRole').style.display = "none";
+      }
+    }
+  
+
     var socket = io();
 
     socket.on('updateRoom', clients => {
+      waiting();
+      document.getElementById('listArea').innerHTML = "";
+      document.getElementById('listArea').appendChild(makeUL(clients));
+      console.log(clients);
+    })
 
-        document.getElementById('listarea').innerHTML = "";
-        document.getElementById('listarea').appendChild(makeUL(clients));
-        console.log(clients);
+    socket.on('deal', data => {
+      game();
+      yourRole = data;
+      document.getElementById('imgSrc').src = data;
+      console.log(data);
+    })
+
+    socket.on('dealhost', grim => {
+      game();
+      document.getElementById('role').style.display = "none";
+      document.getElementById('listArea').style.display = "none";
+      document.getElementById('grim').innerHTML = "";
+      document.getElementById('grim').appendChild(makeRoleList(grim));
+    })
+
+    socket.on('updateRoomNumber', number => {
+      document.getElementById('code').innerText = "Room Code: " + number;
     })
 
     function join(){
-        var data = {};
-        data.room = document.getElementById('room').value;
-        data.name = document.getElementById('name').value;
-        socket.emit('roomJoin', data);
+      var data = {};
+      data.room = document.getElementById('room').value;
+      data.name = document.getElementById('name').value;
+      socket.emit('roomJoin', data);
     }
-    </script>
+
+    function start(){
+      socket.emit('start');
+    }
+  </script>
+  
   </body>
 </html>
