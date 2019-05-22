@@ -56,6 +56,12 @@
 
     </ul>
   </div>
+
+  <div class='list-area'>
+    <ul id='drunk' >
+
+    </ul>
+  </div>
   
   <div id='roleinfo'>
       <ul>
@@ -202,7 +208,13 @@
       document.getElementById('role').style.display = "none";
       document.getElementById('listArea').style.display = "none";
       document.getElementById('grim').innerHTML = "";
-      document.getElementById('grim').appendChild(makeRoleList(grim));
+      document.getElementById('grim').appendChild(makeRoleList(grim.grim));
+
+      var node = document.createElement("LI");                 // Create a <li> node
+      var textnode = document.createTextNode("Drunk: " + grim.drunkCharacter);         // Create a text node
+      node.appendChild(textnode); 
+      document.getElementById('drunk').appendChild(node);
+
     })
 
     socket.on('updateRoomNumber', number => {

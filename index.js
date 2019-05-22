@@ -248,17 +248,17 @@ io.on('connection', function(socket){
   socket.on('start', () => {
 
     var clients = io.sockets.adapter.rooms[socket.lobbyRoom].sockets;
-    var num = Object.keys(clients).length;
+    var num = Object.keys(clients).length - 1;
     var cards = [];
     var rolenames = [];
     var grim = [];
 
     if(num < 5){
-      num = 5;
+      num = 9;
     }
     thisSetup = setupNumbers[num];
 
-    setupPlayers(); //this is where its breaking.
+    setupPlayers();
     
     for(var i = 0; i < players.length; i++){
       cards.push("/img/" + players[i].img);
@@ -271,10 +271,14 @@ io.on('connection', function(socket){
         
       }
       else{
+        var drunkchar= "";
         var clientSocket = io.sockets.connected[client];
         var cardIndex = Math.floor(Math.random() * cards.length);
         var card = cards[cardIndex];
-        grim.push({name: clientSocket.name, role: rolenames[cardIndex]})
+        if(rolenames[cardIndex] == drunkCharacter.name){
+          drunkchar = " (DRUNK)";
+        }
+        grim.push({name: clientSocket.name, role: rolenames[cardIndex] + drunkchar})
         cards.splice(cardIndex, 1);
         rolenames.splice(cardIndex, 1);
         io.to(client).emit('deal', card);
@@ -282,7 +286,8 @@ io.on('connection', function(socket){
       
     }
 
-    io.to(socket.id).emit('dealhost', grim);
+    console.log(drunkCharacter)
+    io.to(socket.id).emit('dealhost', {grim, drunkCharacter});
 
     players = [];
     selectedTown = [];
