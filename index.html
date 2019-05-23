@@ -66,31 +66,31 @@
   <div id='roleinfo'>
       <ul>
           <li><span><img src='/img/Townsfolk.png'></span></li>
-          <li><img src='/img/Chef_print.png'></li>
-          <li><img src='/img/Empath_print.png'></li>
-          <li><img src='/img/Fortune Teller_print.png'></li>
-          <li><img src='/img/Investigator_print.png'></li>
-          <li><img src='/img/Librarian_print.png'></li>
-          <li><img src='/img/Mayor_print.png'></li>
-          <li><img src='/img/Monk_print.png'></li>
-          <li><img src='/img/Ravenkeeper_print.png'></li>
-          <li><img src='/img/Slayer_print.png'></li>
-          <li><img src='/img/Soldier_print.png'></li>
-          <li><img src='/img/Undertaker_print.png'></li>
-          <li><img src='/img/Washerwoman_print.png'></li>
-          <li><img src='/img/Virgin_print.png'></li>
+          <li><img src='/img/Chef_print.png' alt='/img/Chef_Token.png' onclick='modalShow(this)'></li>
+          <li><img src='/img/Empath_print.png' alt='/img/Empath_Token.png' onclick='modalShow(this)'></li>
+          <li><img src='/img/Fortune Teller_print.png' alt='/img/Fortune_Teller_Token.png' onclick='modalShow(this)'></li>
+          <li><img src='/img/Investigator_print.png' alt='/img/Investigator_Token.png' onclick='modalShow(this)'></li>
+          <li><img src='/img/Librarian_print.png' alt='/img/Librarian_Token.png' onclick='modalShow(this)'></li>
+          <li><img src='/img/Mayor_print.png' alt='/img/Mayor_Token.png' onclick='modalShow(this)'></li>
+          <li><img src='/img/Monk_print.png' alt='/img/Monk_Token.png' onclick='modalShow(this)'></li>
+          <li><img src='/img/Ravenkeeper_print.png' alt='/img/Ravenkeeper_Token.png' onclick='modalShow(this)'></li>
+          <li><img src='/img/Slayer_print.png' alt='/img/Slayer_Token.png' onclick='modalShow(this)'></li>
+          <li><img src='/img/Soldier_print.png' alt='/img/Soldier_Token.png' onclick='modalShow(this)'></li>
+          <li><img src='/img/Undertaker_print.png' alt='/img/Undertaker_Token.png' onclick='modalShow(this)'></li>
+          <li><img src='/img/Washerwoman_print.png' alt='/img/Washerwoman_Token.png' onclick='modalShow(this)'></li>
+          <li><img src='/img/Virgin_print.png' alt='/img/Virgin_Token.png' onclick='modalShow(this)'></li>
 
           <li><span><img src='/img/Outsiders.png'></span></li>
-          <li><img src='/img/Butler_print.png'></li>
-          <li><img src='/img/Drunk_print.png'></li>
-          <li><img src='/img/Saint_print.png'></li>
-          <li><img src='/img/Recluse_print.png'></li>
+          <li><img src='/img/Butler_print.png' alt='/img/Butler_Token.png' onclick='modalShow(this)'></li>
+          <li><img src='/img/Drunk_print.png' alt='/img/Drunk_Token.png' onclick='modalShow(this)'></li>
+          <li><img src='/img/Saint_print.png' alt='/img/Saint_Token.png' onclick='modalShow(this)'></li>
+          <li><img src='/img/Recluse_print.png' alt='/img/Recluse_Token.png'  onclick='modalShow(this)'></li>
 
           <li><span><img src='/img/Minions.png'></span></li>
-          <li><img src='/img/Baron_print.png'></li>
-          <li><img src='/img/Scarlet Woman_print.png'></li>
-          <li><img src='/img/Poisoner_print.png'></li>
-          <li><img src='/img/Spy_print.png'></li>
+          <li><img src='/img/Baron_print.png' alt='/img/Baron_Token.png' onclick='modalShow(this)'></li>
+          <li><img src='/img/Scarlet Woman_print.png' alt='/img/Scarlet_Woman_Token.png' onclick='modalShow(this)'></li>
+          <li><img src='/img/Poisoner_print.png' alt='/img/Poisoner_Token.png' onclick='modalShow(this)'></li>
+          <li><img src='/img/Spy_print.png' alt='/img/Spy_Token.png' onclick='modalShow(this)'></li>
       </ul>
   </div>
 
@@ -110,9 +110,32 @@
   -->
 	
   </div>
+
+  <!-- The Modal -->
+  <div id="myModal" class="modal">
+    <span class="close">×</span>
+    <img class="modal-content" id="img01">
+    <div id="caption"></div>
+  </div>
   
   <script src="/socket.io/socket.io.js"></script>
   <script>
+    var modal = document.getElementById('myModal');
+    var modalImg = document.getElementById("img01");
+
+    function modalShow(e){
+        modal.style.display = "block";
+        modalImg.src = e.alt;
+        //modalImg.alt = $(e).alt;
+        //captionText.innerHTML = this.alt;
+    }
+
+    var span = document.getElementsByClassName("close")[0];
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() { 
+        modal.style.display = "none";
+    }
 
     var yourRole;
 
@@ -214,14 +237,6 @@
       document.getElementById('listArea').style.display = "none";
       document.getElementById('grim').innerHTML = "";
       document.getElementById('grim').appendChild(makeRoleList(grim.grim));
-
-      var node = document.createElement("LI");                 // Create a <li> node
-      var textnode = document.createTextNode("Drunk: " + grim.drunkCharacter);         // Create a text node
-      node.appendChild(textnode); 
-      document.getElementById('drunk').appendChild(node);
-
-      console.log(grim)
-      console.log(grim.tokensNotUsed);
 
       //tokensNotUsed
 
