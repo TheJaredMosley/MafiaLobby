@@ -164,6 +164,7 @@ var selectedOut = [];
 var selectedMinion = [];
 var selectedDemon = [];
 var drunkCharacter = [];
+var tokensNotUsed = [];
 
 function setupPlayers(){
   for(i = 0; i < thisSetup[2]; i++){
@@ -187,7 +188,6 @@ function setupPlayers(){
     selectedTown.push(ranNum);
     players.push(jsonobj["townsfolk"][ranNum]);
   }
-  
   for(i = 0; i < thisSetup[1]; i++){
     var ranNum = Math.floor(Math.random() * jsonobj["outsider"].length);
     while(selectedOut.includes(ranNum)){
@@ -207,9 +207,6 @@ function setupPlayers(){
       players.push(jsonobj["outsider"][ranNum]);
     }
   }
-    
-    
-  
   for(i = 0; i < thisSetup[3]; i++){
     var ranNum = Math.floor(Math.random() * jsonobj["demon"].length);
     while(selectedDemon.includes(ranNum)){
@@ -218,9 +215,39 @@ function setupPlayers(){
     selectedDemon.push(ranNum);
     players.push(jsonobj["demon"][ranNum]);
   }
+
+  //Selecting 3 random unused tokens
+  var ranNum = Math.floor(Math.random() * jsonobj["townsfolk"].length);
+  while(selectedTown.includes(ranNum)){
+    ranNum = Math.floor(Math.random() * jsonobj["townsfolk"].length);
+  }
+  selectedTown.push(ranNum);
+  tokensNotUsed.push(jsonobj["townsfolk"][ranNum])
+
+  ranNum = Math.floor(Math.random() * jsonobj["townsfolk"].length);
+  while(selectedTown.includes(ranNum)){
+    ranNum = Math.floor(Math.random() * jsonobj["townsfolk"].length);
+  }
+  selectedTown.push(ranNum);
+  tokensNotUsed.push(jsonobj["townsfolk"][ranNum])
+
+  if(selectedOut.length < 4){
+    ranNum = Math.floor(Math.random() * jsonobj["outsider"].length);
+    while(selectedOut.includes(ranNum)){
+      ranNum = Math.floor(Math.random() * jsonobj["outsider"].length);
+    }
+    selectedOut.push(ranNum);
+    tokensNotUsed.push(jsonobj["outsider"][ranNum])
+  }
+  else{
+    ranNum = Math.floor(Math.random() * jsonobj["townsfolk"].length);
+    while(selectedTown.includes(ranNum)){
+      ranNum = Math.floor(Math.random() * jsonobj["townsfolk"].length);
+    }
+    selectedTown.push(ranNum);
+    tokensNotUsed.push(jsonobj["townsfolk"][ranNum])
+  }
   
-  //console.log(players);
-  //console.log(drunkCharacter);
 
 }
 
@@ -246,18 +273,17 @@ io.on('connection', function(socket){
   })
 
   socket.on('start', () => {
-
     var clients = io.sockets.adapter.rooms[socket.lobbyRoom].sockets;
     var num = Object.keys(clients).length - 1;
     var cards = [];
     var rolenames = [];
     var grim = [];
-
     if(num < 5){
       num = 9;
     }
     thisSetup = setupNumbers[num];
 
+    console.log("Num players: " + num);
     setupPlayers();
     
     for(var i = 0; i < players.length; i++){
@@ -265,7 +291,6 @@ io.on('connection', function(socket){
       rolenames.push(players[i].name);
     }
 
-  
     for (var client in clients){
       if(client == socket.id){
         
@@ -285,9 +310,9 @@ io.on('connection', function(socket){
       }
       
     }
-
-    console.log(drunkCharacter)
-    io.to(socket.id).emit('dealhost', {grim, drunkCharacter});
+    
+    console.log({grim, drunkCharacter, tokensNotUsed});
+    io.to(socket.id).emit('dealhost', {grim, drunkCharacter, tokensNotUsed});
 
     players = [];
     selectedTown = [];
@@ -295,8 +320,9 @@ io.on('connection', function(socket){
     selectedMinion = [];
     selectedDemon = [];
     drunkCharacter = [];
+    tokensNotUsed = [];
 
-    console.log(grim);
+    
 
 
   });

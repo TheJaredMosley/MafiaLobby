@@ -93,6 +93,13 @@
           <li><img src='/img/Spy_print.png'></li>
       </ul>
   </div>
+
+  <div id= 'notused' class='list-area'>
+    <h3> Tokens that are not in use:</h3>
+    <ul id = 'tokensNotUsed'>
+
+    </ul>
+  </div>
 	
 	<!-- 
 	<div class='control-buttons'>
@@ -193,14 +200,12 @@
       waiting();
       document.getElementById('listArea').innerHTML = "";
       document.getElementById('listArea').appendChild(makeUL(clients));
-      console.log(clients);
     })
 
     socket.on('deal', data => {
       game();
       yourRole = data;
       document.getElementById('imgSrc').src = data;
-      console.log(data);
     })
 
     socket.on('dealhost', grim => {
@@ -214,6 +219,19 @@
       var textnode = document.createTextNode("Drunk: " + grim.drunkCharacter);         // Create a text node
       node.appendChild(textnode); 
       document.getElementById('drunk').appendChild(node);
+
+      console.log(grim)
+      console.log(grim.tokensNotUsed);
+
+      //tokensNotUsed
+
+      for(var i = 0; i < grim.tokensNotUsed.length; i++){
+        var node = document.createElement("LI");                 // Create a <li> node
+        var textnode = document.createTextNode(grim.tokensNotUsed[i].name);
+        console.log(grim.tokensNotUsed[i].name);        // Create a text node
+        node.appendChild(textnode); 
+        document.getElementById('tokensNotUsed').appendChild(node);
+      }
 
     })
 
